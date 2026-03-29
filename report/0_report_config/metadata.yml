@@ -1,0 +1,41 @@
+Client: Some Government Department
+TargetInformation:
+  TargetName: OS Deployment
+  TargetTest: Risk Assessment
+DocumentName: SRA Report
+DocumentInformation:
+- DocumentVersioning:
+    DocumentStatus: Draft
+    DocumentVersion: 0.1
+    DocumentDate: 2025-01-01
+    DocumentStage: Initial findings
+    DocumentContributor: Jack Moran
+- DocumentVersioning:
+    DocumentStatus: Draft
+    DocumentVersion: 0.2
+    DocumentDate: 2025-01-02
+    DocumentStage: QA - Technical
+    DocumentContributor: Louise kendall
+- DocumentVersioning:
+    DocumentStatus: Draft
+    DocumentVersion: 0.3
+    DocumentDate: 2025-01-03
+    DocumentStage: QA - Grammar
+    DocumentContributor: Danial Atkenson
+- DocumentVersioning:
+    DocumentStatus: Release
+    DocumentVersion: 1.0
+    DocumentDate: 2025-01-04
+    DocumentStage: QA - Final
+    DocumentContributor: Blaise St-Laurent
+StakeholderInformation:
+- StakeholderName: Bob
+  StakeholderRole: CISO
+  StakeholderCompany: Secrets Inc
+- StakeholderName: Alice
+  StakeholderRole: Project Manager
+  StakeholderCompany: Secrets? 
+CustomVariables:
+  Asset0: Linux
+  Asset1: Windows
+

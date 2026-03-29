@@ -1,0 +1,65 @@
+# GrossImpacts labels for the risk matrix and findings
+GrossImpacts:
+  - "Minimal"
+  - "Minor"
+  - "Moderate"
+  - "Significant"
+  - "Severe"
+
+# GrossLikelihoods labels for the risk matrix and findings
+GrossLikelihoods:
+  - "Almost Never"
+  - "Possible but Unlikely"
+  - "Possible"
+  - "Highly Probable"
+  - "Almost Certain"
+
+# Severities labels for the severity matrix and findings
+GrossRiskRatings:
+  - "Low"   
+  - "Medium"    
+  - "High"      
+  - "Critical" 
+
+# Calculated risk matrix is used to determine finding risk based on the intersection of impact and likelihood
+# NOTE: If you change these, please update CalculatedGrossMatrix
+CalculatedGrossMatrix:
+ - ["High", "High", "Critical", "Critical", "Critical"]
+ - ["Medium", "High", "High", "High", "Critical"]
+ - ["Medium", "Medium", "Medium", "High", "High"]
+ - ["Low", "Medium", "Medium", "Medium", "High"]
+ - ["Low", "Low", "Medium", "Medium", "Medium"]
+    
+# TargetImpacts labels for the risk matrix and findings
+TargetImpacts:
+  - "Minimal"
+  - "Minor"
+  - "Moderate"
+  - "Significant"
+  - "Severe"
+
+# TargetLikelihood labels for the risk matrix and 
+TargetLikelihoods:
+  - "Almost Never"
+  - "Possible but Unlikely"
+  - "Possible"
+  - "Highly Probable"
+  - "Almost Certain" 
+
+# Severities labels for the severity matrix and findings 
+# NOTE: If you change these, please update CalculatedTargetMatrix
+TargetRiskRatings:
+  - "Low"   
+  - "Medium"    
+  - "High"      
+  - "Severe" 
+
+# Calculated risk matrix is used to determine severity of the risk based on the intersection of impact and likelihood
+CalculatedTargetMatrix:
+ - ["High", "High", "Severe", "Severe", "Severe"]
+ - ["Medium", "High", "High", "High", "Severe"]
+ - ["Medium", "Medium", "Medium", "High", "High"]
+ - ["Low", "Medium", "Medium", "Medium", "High"]
+ - ["Low", "Low", "Medium", "Medium", "Medium"]
+ 
+

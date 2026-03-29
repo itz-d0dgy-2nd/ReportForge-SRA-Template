@@ -1,0 +1,214 @@
+/* ======== Risk Matrices ======== */
+
+.risk-matrices-section {
+    page: landscape-A3;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center; 
+}
+
+.risk-matrices-section h1 {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 100pt;
+}
+
+.matrix-container {
+    width: 45%;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+}
+
+.risk-matrices-section h2 {
+    text-align: center;
+    margin-bottom: 10pt;
+    margin-top: 0;
+    font-size: 14pt;
+}
+
+.risk-matrices-section table {
+    border-collapse: collapse;
+    width: 100%; 
+    height: auto;
+    padding: 5pt;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.risk-matrices-section table thead tr th {
+    background-color: #290d32;
+    height: 67.5pt;
+    width: 67.5pt;
+    max-height: 67.5pt;
+    max-width: 67.5pt;
+    color: white;
+    font-weight: 400;
+    font-style: light;
+    font-size: 11pt;
+    border: 1px solid white;
+}
+
+.risk-matrices-section table tbody tr th {
+    background-color: #290d32;
+    width: 67.5pt;
+    height: 67.5pt;
+    max-height: 67.5pt;
+    max-width: 67.5pt;
+    color: white;
+    font-weight: 400;
+    font-style: light;
+    font-size: 11pt;
+    border: 1px solid white;
+}
+
+.risk-matrices-section table tbody tr td {
+    border: 1px solid white;
+    height: 67.5pt;
+    width: 67.5pt;
+    max-height: 67.5pt;
+    max-width: 67.5pt;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.risk-matrices-section a[href^="#"] {
+    padding: 2pt;
+    font-size: 9pt;
+}
+
+.risk-matrices-section table {
+    border-collapse: collapse;
+    width: 100%; 
+    height: auto;
+    padding: 5pt;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.risk-matrices-section table thead tr th {
+    background-color: var(--color-primary-purple);
+    height: var(--cell-size-standard);
+    width: var(--cell-size-standard);
+    max-height: var(--cell-size-standard);
+    max-width: var(--cell-size-standard);
+    color: var(--color-background-white);
+    font-weight: 400;
+    font-size: 11pt;
+    border: 1px solid var(--color-background-white);
+}
+
+.risk-matrices-section table tbody tr th {
+    background-color: var(--color-primary-purple);
+    width: var(--cell-size-standard);
+    height: var(--cell-size-standard);
+    max-height: var(--cell-size-standard);
+    max-width: var(--cell-size-standard);
+    color: var(--color-background-white);
+    font-weight: 400;
+    font-size: 11pt;
+    border: 1px solid var(--color-background-white);
+}
+
+.risk-matrices-section table tbody tr td {
+    border: 1px solid var(--color-background-white);
+    height: var(--cell-size-standard);
+    width: var(--cell-size-standard);
+    max-height: var(--cell-size-standard);
+    max-width: var(--cell-size-standard);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.risk-matrices-section a[href^="#"] {
+    padding: 2pt;
+}
+
+/* ======== Risk Section ======== */
+
+.risks-section { 
+    page: landscape-A3;
+}
+
+.risks-section table tbody tr td:nth-child(4),  /* Drivers */
+.risks-section table tbody tr td:nth-child(9) { /* Recommended Controls */
+    text-align: left;
+}
+
+.risks-section table thead tr:first-child th:nth-child(5),
+.risks-section table thead tr:first-child th:nth-child(6),
+.risks-section table thead tr:first-child th:nth-child(7),
+.risks-section table thead tr:first-child th:nth-child(8) {
+    width: 187.5pt;
+}
+
+.risks-section table thead tr:last-child th{
+    width: 62.5pt;
+}
+
+/* ======== Controls Section Tables ======== */
+
+.controls-section { 
+    page: landscape-A3;
+}
+
+.controls-section table {
+    border-spacing: 1;
+    border-collapse: collapse;
+    background: var(--color-background-white);
+    overflow: hidden;
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+    text-align: center;
+}
+
+.controls-section table thead tr {
+    height: 30pt;
+    background-color: var(--color-primary-purple);
+}
+
+.controls-section table thead tr th {
+    color: var(--color-background-white);
+    font-weight: 400;
+}
+
+.controls-section table tbody tr {
+    height: 30pt;
+    background-color: var(--color-background-table-row);
+}
+
+.controls-section table tbody tr:nth-child(even) {
+    background-color: var(--color-background-white);
+}
+
+/* ======== Controls to Risks Mapping Section ======== */
+
+.controls-to-risks-mapping-section table {
+    border-spacing: 1;
+    border-collapse: collapse;
+    background: var(--color-background-white);
+    overflow: hidden;
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+    text-align: center;
+}
+
+.controls-to-risks-mapping-section table thead tr {
+    height: 30pt;
+    background-color: var(--color-primary-purple);
+}
+
+.controls-to-risks-mapping-section table thead tr th {
+    color: var(--color-background-white);
+    font-weight: 400;
+}
+
+.controls-to-risks-mapping-section table tbody tr {
+    height: 30pt;
+    background-color: var(--color-background-table-row);
+}

@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- Template CSS -->
+        <link rel="stylesheet" href="{{ .Path }}/0_report_template/styles/template.css">
+        <link rel="stylesheet" href="{{ .Path }}/0_report_template/styles/risks.css">
+        <link rel="stylesheet" href="{{ .Path }}/0_report_template/styles/custom.css">
+
+        <!-- Template JS -->
+        <script src="{{ .Path }}/0_report_template/scripts/template.js"></script>
+
+        <!-- Google Fonts -->
+        <link rel="stylesheet" href="{{ .Path }}/0_report_template/styles/exo2/font-exo2.css">
+        <link rel="stylesheet" href="{{ .Path }}/0_report_template/styles/helvetica-neue/font-helvetica-neue.css">
+
+        <!-- Prism.js -->
+        <link rel="stylesheet" href="{{ .Path }}/0_report_template/styles/prismjs/prism-tomorrow.min.css">
+        <script src="{{ .Path }}/0_report_template/scripts/prismjs/prism.min.js"></script>
+        <script src="{{ .Path }}/0_report_template/scripts/prismjs/prism-markup.min.js"></script>
+        <script src="{{ .Path }}/0_report_template/scripts/prismjs/prism-markup-templating.min.js"></script>
+        <script src="{{ .Path }}/0_report_template/scripts/prismjs/prism-php.min.js"></script>
+        <script src="{{ .Path }}/0_report_template/scripts/prismjs/prism-go.min.js"></script>
+        <script src="{{ .Path }}/0_report_template/scripts/prismjs/prism-python.min.js"></script>
+        <script src="{{ .Path }}/0_report_template/scripts/prismjs/prism-csharp.min.js"></script>
+
+        <!-- Dynamic Severity Colours -->
+        <style>
+            {{- if .FileCache.RiskConfig }}
+            {{- range $i, $ratings := .FileCache.RiskConfig.GrossRiskRatings }}
+            .risk-severity[data-gross-rating="{{ $ratings }}"] { 
+                background: var(--color-rating-{{ $i }}); 
+            }
+            {{- end }}
+
+            {{- range $i, $ratings := .FileCache.RiskConfig.TargetRiskRatings }}
+            .risk-severity[data-target-rating="{{ $ratings }}"] { 
+                background: var(--color-rating-{{ $i }}); 
+            }
+            {{- end }}
+            {{- end }}
+        </style>
+
+        <title>{{ .FileCache.MetadataConfig.TargetInformation.TargetName }} - {{ .FileCache.MetadataConfig.TargetInformation.TargetTest }}</title>
+    </head>
+
+    <body>
+        <a href="#main-content" class="skip-link" aria-label="Skip to main content">Skip to main content</a>
+        <main role="main" id="main-content">
+            {{- template "metadata" . }}
+            {{- template "table-of-contents" . }}
+            {{- template "document-information" . }}
+            {{- template "summaries" . }}
+            {{- template "risk-matrices" . }}
+            {{- template "risks" . }}
+            {{- template "controls" . }}
+            {{- template "controls-to-risks-mapping" . }}
+            {{- template "appendices" . }}
+            {{- template "document-status-indicator" . }}
+        </main>
+    </body>
+</html>
+
+<!-- Metadata Template -->
+{{- define "metadata" }}
+{{- if .FileCache.MetadataConfig }}
+<section id="metadata" class="metadata-section" aria-labelledby="metadata-heading">
+    <article>
+        <h1 id="metadata-heading">{{ .FileCache.MetadataConfig.TargetInformation.TargetName }}</h1>
+        <h2>{{ .FileCache.MetadataConfig.TargetInformation.TargetTest }}</h2>
+        <table aria-label="Document metadata">
+            <tbody>
+                <tr><th scope="row">Client:</th><td>{{ .FileCache.MetadataConfig.Client }}</td></tr>
+                {{- with index .FileCache.MetadataConfig.DocumentInformation (sub (len .FileCache.MetadataConfig.DocumentInformation) 1) }}
+                <tr><th scope="row">Document Status:</th><td>{{ .DocumentVersioning.DocumentStatus }}</td></tr>
+                <tr><th scope="row">Document Version:</th><td>{{ .DocumentVersioning.DocumentVersion }}</td></tr>
+                <tr><th scope="row">Document Date:</th><td>{{ .DocumentVersioning.DocumentDate }}</td></tr>
+                <tr><th scope="row">Document Stage:</th><td>{{ .DocumentVersioning.DocumentStage }}</td></tr>
+                {{- end }}
+            </tbody>
+        </table>
+    </article>
+    <div class="front-page"></div>
+    <div class="overlay-image"></div>
+    <div class="page-break"></div>
+</section>
+{{- end }}
+{{- end }}
+
+<!-- Table of Contents Template -->
+{{- define "table-of-contents" }}
+{{- if .FileCache.MetadataConfig }}
+<section id="table-of-contents" class="table-of-contents-section" aria-labelledby="table-of-contents-heading">
+    <h1 id="table-of-contents-heading">Table of Contents</h1>
+    <nav role="navigation">
+        <ul>
+            {{- if .FileCache.MetadataConfig.DocumentInformation }}
+            <li><a href="#document-information" aria-label="Navigate to Document Information">Document Information</a></li>
+            {{- end }}
+
+            {{- range .FileCache.Summaries }}
+            <li><a href="#summaries-{{ .Headers.ReportSummaryName }}" aria-label="Navigate to {{ .Headers.ReportSummaryName }} summary">{{ .Headers.ReportSummaryTitle }}</a></li>
+            {{- end }}
+
+            {{- if .FileCache.RiskConfig }}
+            <li><a href="#risk-matrices" aria-label="Navigate to Risk Matrices">Risk Matrices</a></li>
+            {{- end }}
+
+            {{- range .RiskGroups }}
+            <li><a href="#risks-{{ .Directory }}" aria-label="Navigate to {{ .Directory }} Risks">Risks - {{ .Directory }}</a></li>
+            {{- end }}
+
+            {{- range .ControlGroups }}
+            <li><a href="#controls-{{ .Directory }}" aria-label="Navigate to {{ .Directory }} Controls">Controls - {{ .Directory }}</a></li>
+            {{- end }}
+
+            {{- if and .FileCache.Controls .FileCache.Risks }}
+            <li><a href="#controls-to-risks-mapping" aria-label="Navigate to Controls to Risks Mapping">Controls to Risks Mapping</a></li>
+            {{- end }}
+
+            {{- range .AppendixGroups }}
+            <li><a href="#appendices-{{ .Directory }}" aria-label="Navigate to {{ .Directory }} Appendices">Appendices - {{ .Directory }}</a></li>
+            {{- end }}
+        </ul>
+    </nav>
+    <div class="page-break"></div>
+</section>
+{{- end }}
+{{- end }}
+
+<!-- Document Information Template -->
+{{- define "document-information" }}
+{{- if .FileCache.MetadataConfig }}
+<section id="document-information" class="document-information-section" aria-labelledby="document-information">
+    <h1 id="document-information-heading">Document Information</h1>
+    <h2>Document Versioning</h2>
+    <table role="table" aria-label="Document Versioning Table">
+        <thead>
+            <tr>
+                <th scope="col">Status</th>
+                <th scope="col">Version</th>
+                <th scope="col">Date</th>
+                <th scope="col">Stage</th>
+                <th scope="col">Contributor</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{- range .FileCache.MetadataConfig.DocumentInformation }}
+            <tr>
+                <td>{{ .DocumentVersioning.DocumentStatus }}</td>
+                <td>{{ .DocumentVersioning.DocumentVersion }}</td>
+                <td>{{ .DocumentVersioning.DocumentDate }}</td>
+                <td>{{ .DocumentVersioning.DocumentStage }}</td>
+                <td>{{ .DocumentVersioning.DocumentContributor }}</td>
+            </tr>
+            {{- end }}
+        </tbody>
+    </table>
+    <h2>Document Stakeholders</h2>
+    <table role="table" aria-label="Stakeholders Table">
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Company</th>
+                <th scope="col">Role</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{- range .FileCache.MetadataConfig.StakeholderInformation }}
+            <tr>
+                <td>{{ .StakeholderName }}</td>
+                <td>{{- if .StakeholderCompany }}{{- if ne .StakeholderCompany $.MetadataConfig.Client }}{{ .StakeholderCompany }}{{- else }}{{ $.MetadataConfig.Client }}{{- end }}{{- else }}{{ $.MetadataConfig.Client }}{{- end }}</td>
+                <td>{{ .StakeholderRole }}</td>
+            </tr>
+            {{- end }}
+        </tbody>
+    </table>
+    <div class="page-break"></div>
+</section>
+{{- end }}
+{{- end }}
+
+<!-- Summaries Template -->
+{{- define "summaries" }}
+{{- if .FileCache.Summaries }}
+<section id="summaries" class="summaries-section" aria-labelledby="summaries-heading">
+    <h1 id="summaries-heading">Report Summaries</h1>
+    {{- range .FileCache.Summaries }}
+    <article id="summaries-{{ .Headers.ReportSummaryName }}" class="summary" aria-labelledby="{{ .Headers.ReportSummaryName }}-heading">
+        <h2 id="{{ .Headers.ReportSummaryName }}-heading">{{ .Headers.ReportSummaryTitle }}</h2>
+        {{ .Body }}
+    </article>
+    <div class="page-break"></div>
+    {{- end }}
+</section>
+{{- end }}
+{{- end }}
+
+<!-- Risk Matrices Template -->
+{{- define "risk-matrices" }}
+{{- if .FileCache.RiskConfig }}
+<section id="risk-matrices" class="risk-matrices-section" aria-label="Risk Matrices">
+    <h1>Risk Matrices</h1>
+
+    <section class="matrix-container">
+        <h2>Gross Risk Matrix</h2>
+        <table id="risk-gross-matrix" role="table" aria-label="Gross Risk Matrix">
+            <thead>
+                <tr>
+                    <th scope="col"></th>
+                    {{- range .FileCache.RiskConfig.GrossLikelihoods }}<th scope="col">{{ . }}</th>{{- end }}
+                </tr>
+            </thead>
+            <tbody>
+                {{- range $rowIndex, $intersections := .FileCache.RiskMatrices.GrossMatrix }}
+                <tr>
+                    <th scope="row">{{ index $.FileCache.RiskConfig.GrossImpacts $rowIndex }}</th>
+                    {{- range $columnIndex, $intersectionString := $intersections }}
+                    <td class="risk-severity" data-gross-rating="{{ index (index $.FileCache.RiskConfig.CalculatedGrossMatrix $rowIndex) $columnIndex }}">
+                        {{- range $id := split $intersectionString ", " -}}
+                            {{- range $.FileCache.Risks -}}
+                                {{- if eq .Headers.RiskID $id -}}
+                                <a href="#{{ .Headers.RiskName }}">{{ $id }}</a>
+                                {{- end -}}
+                            {{- end -}}
+                        {{- end -}}
+                    </td>
+                    {{- end }}
+                </tr>
+                {{- end }}
+            </tbody>
+        </table>
+    </section>
+
+    <section class="matrix-container">
+        <h2>Target Risk Matrix</h2>
+        <table id="risk-target-matrix" role="table" aria-label="Target Risk Matrix">
+            <thead>
+                <tr>
+                    <th scope="col"></th>
+                    {{- range .FileCache.RiskConfig.TargetLikelihoods }}<th scope="col">{{ . }}</th>{{- end }}
+                </tr>
+            </thead>
+            <tbody>
+                {{- range $rowIndex, $intersections := .FileCache.RiskMatrices.TargetMatrix }}
+                <tr>
+                    <th scope="row">{{ index $.FileCache.RiskConfig.TargetImpacts $rowIndex }}</th>
+                    {{- range $columnIndex, $intersectionString := $intersections }}
+                    <td class="risk-severity" data-target-rating="{{ index (index $.FileCache.RiskConfig.CalculatedTargetMatrix $rowIndex) $columnIndex }}">
+                        {{- range $id := split $intersectionString ", " -}}
+                            {{- range $.FileCache.Risks -}}
+                                {{- if eq .Headers.RiskID $id -}}
+                                <a href="#{{ .Headers.RiskName }}">{{ $id }}</a>
+                                {{- end -}}
+                            {{- end -}}
+                        {{- end -}}
+                    </td>
+                    {{- end }}
+                </tr>
+                {{- end }}
+            </tbody>
+        </table>
+    </section>
+
+    <div class="page-break"></div>
+</section>
+{{- end }}
+{{- end }}
+
+<!-- Risks Template -->
+{{- define "risks" }}
+{{- if .RiskGroups }}
+<section id="risks" class="risks-section" aria-labelledby="risks-heading">
+    <h1 id="risks-heading">Risks</h1>
+    {{- range .RiskGroups }}
+    <section id="risks-{{ .Directory }}" class="risks-directory" aria-labelledby="risks-{{ .Directory }}-heading">
+        <h2 id="risks-{{ .Directory }}-heading">{{ .Directory }} Risks</h2>
+        <table aria-label="Risk details for {{ .Directory }}">
+            <thead>
+                <tr>
+                    <th scope="col" rowspan="2">Risk ID</th>
+                    <th scope="col" rowspan="2">Risk Title</th>
+                    <th scope="col" rowspan="2">Description</th>
+                    <th scope="col" rowspan="2">Drivers</th>
+                    <th scope="col" rowspan="2">Consequences</th>
+                    <th scope="col" colspan="3">Gross Risk</th>
+                    <th scope="col" rowspan="2">Recommended Controls</th>
+                    <th scope="col" colspan="3">Target Risk</th>
+                </tr>
+                <tr>
+                    <th scope="col">Impact</th>
+                    <th scope="col">Likelihood</th>
+                    <th scope="col">Rating</th>
+                    <th scope="col">Impact</th>
+                    <th scope="col">Likelihood</th>
+                    <th scope="col">Rating</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{- range .Items }}
+                <tr id="{{ .Headers.RiskName }}">
+                    <td>{{ .Headers.RiskID }}</td>
+                    <td>{{ .Headers.RiskTitle }}</td>
+                    <td>{{ extractRiskSection .Body "Risk Description" }}</td>
+                    <td>{{ extractRiskSection .Body "Risk Drivers" }}</td>
+                    <td>{{ extractRiskSection .Body "Risk Consequences" }}</td>
+                    <td>{{ .Headers.RiskGrossImpact }}</td>
+                    <td>{{ .Headers.RiskGrossLikelihood }}</td>
+                    <td class="risk-severity" data-gross-rating="{{ .Headers.RiskGrossRating }}">{{ .Headers.RiskGrossRating }}</td>
+                    <td>{{ extractRiskSection .Body "Recommended Controls" }}</td>
+                    <td>{{ .Headers.RiskTargetImpact }}</td>
+                    <td>{{ .Headers.RiskTargetLikelihood }}</td>
+                    <td class="risk-severity" data-target-rating="{{ .Headers.RiskTargetRating }}">{{ .Headers.RiskTargetRating }}</td>
+                </tr>
+                {{- end }}
+            </tbody>
+        </table>
+        <div class="page-break"></div>
+    </section>
+    {{- end }}
+</section>
+{{- end }}
+{{- end }}
+
+<!-- Controls Template -->
+{{- define "controls" }}
+{{- if .ControlGroups }}
+<section id="controls" class="controls-section" aria-labelledby="controls-heading">
+    <h1 id="controls-heading">Controls</h1>
+    {{- range .ControlGroups }}
+    <section id="controls-{{ .Directory }}" class="controls-directory" aria-labelledby="controls-{{ .Directory }}-heading">
+        <h2 id="controls-{{ .Directory }}-heading">{{ .Directory }} Catalog</h2>
+        <table aria-label="Control details for {{ .Directory }}">
+            <thead>
+                <tr>
+                    <th scope="col">Control ID</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Reduces</th>
+                    <th scope="col">NZISM Reference(s)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{- range .Items }}
+                <tr id="{{ .Headers.ControlName }}">
+                    <td>{{ .Headers.ControlID }}</td>
+                    <td>{{ .Headers.ControlTitle }}</td>
+                    <td>{{ extractControlSection .Body "Control Description" }}</td>
+                    <td>{{ extractControlSection .Body "Control Reduces" }}</td>
+                    <td>{{ range .Headers.ControlNZISMReferences }}<a href='https://nzism.gcsb.govt.nz/ism-document#:~:text={{ . }}'>{{ . }}</a> {{ end }}</td>
+                </tr>
+                {{- end }}
+            </tbody>
+        </table>
+        <div class="page-break"></div>
+    </section>
+    {{- end }}
+</section>
+{{- end }}
+{{- end }}
+
+<!-- Controls to Risks Mapping Template -->
+{{- define "controls-to-risks-mapping" }}
+{{- if .ControlRiskMappings }}
+<section id="controls-to-risks-mapping" class="controls-to-risks-mapping-section" aria-labelledby="controls-to-risks-mapping-heading">
+    <h1 id="controls-to-risks-mapping-heading">Controls to Risks Mapping</h1>
+    <table role="table" aria-label="Controls to Risks Mapping Table">
+        <thead>
+            <tr>
+                <th scope="col">Control ID</th>
+                <th scope="col">Control Title</th>
+                <th scope="col">Risk IDs</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{- range $mapping := .ControlRiskMappings }}
+            <tr>
+                <td><a href="#{{ $mapping.ControlName }}">{{ $mapping.ControlID }}</a></td>
+                <td>{{ $mapping.ControlTitle }}</td>
+                <td>
+                    {{- range $i, $riskID := $mapping.RiskIDs }}
+                    {{- if gt $i 0 }}, {{ end }}
+                    <a href="#{{ index $mapping.RiskName $i }}">{{ $riskID }}</a>
+                    {{- end }}
+                </td>
+            </tr>
+            {{- end }}
+        </tbody>
+    </table>
+    <div class="page-break"></div>
+</section>
+{{- end }}
+{{- end }}
+
+<!-- Appendices Template -->
+{{- define "appendices" }}
+{{- if .AppendixGroups }}
+<section id="appendices" class="appendices-section" aria-labelledby="appendices-heading">
+    <h1 id="appendices-heading">Appendices</h1>
+    {{- range .AppendixGroups }}
+    <section id="appendices-{{ .Directory }}" class="appendices-directory" aria-labelledby="appendices-{{ .Directory }}-heading">
+        <h2 id="appendices-{{ .Directory }}-heading">{{ .Directory }} Appendices</h2>
+        {{- range .Items }}
+        <article id="{{ .Headers.AppendixName }}" class="appendix" aria-labelledby="{{ .Headers.AppendixName }}-heading">
+            <h3 id="{{ .Headers.AppendixName }}-heading">{{ .Headers.AppendixTitle }}</h3>
+            {{ .Body }}
+        </article>
+        <div class="page-break"></div>
+        {{- end }}
+    </section>
+    {{- end }}
+</section>
+{{- end }}
+{{- end }}
+
+<!-- Document Status Indicator Template -->
+{{- define "document-status-indicator" }}
+{{- if .FileCache.MetadataConfig }}
+{{- with index .FileCache.MetadataConfig.DocumentInformation (sub (len .FileCache.MetadataConfig.DocumentInformation) 1) }}
+{{- if eq .DocumentVersioning.DocumentStatus "Draft" }}
+<p class="AE3CEE3B46BEBFFE161D55F7AF5F97F1"></p>
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}

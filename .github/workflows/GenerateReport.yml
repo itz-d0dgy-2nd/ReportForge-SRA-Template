@@ -1,0 +1,44 @@
+name: Generate Report
+on:
+  push:
+    branches:
+      - main 
+    paths:
+      - report/**
+
+permissions:
+  contents: write
+
+jobs:
+  GenerateReport:
+    runs-on: ubuntu-latest
+    if: |
+      contains(github.event.head_commit.message, 'QA - Technical') ||
+      contains(github.event.head_commit.message, 'QA - Grammar') ||
+      contains(github.event.head_commit.message, 'QA - Final')
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Run ReportForge
+        run: | 
+          export ACTION="true"
+          wget $(curl -s https://api.github.com/repos/itz-d0dgy-2nd/ReportForge/releases | grep "browser_download_url" | grep "linux" | head -n 1 | cut -d '"' -f 4)
+          chmod +x amd64_linux_ReportForge
+          ./amd64_linux_ReportForge
+          
+      - name: Upload ReportForge Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: report
+          path: |
+            ./*.pdf
+            ./*.xlsx
+            ./*.html
+      
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-update ReportForge files [skip ci]" && git push)

@@ -1,0 +1,463 @@
+/* ======== CSS Custom Properties ======== */
+:root {
+    /* Brand Colors */
+    --color-primary-purple: #290d32;
+    --color-accent-light-purple: #c4a4f5;
+    --color-text-primary: #313131;
+    --color-text-secondary: #252525;
+    --color-text-heading: #000000;
+    --color-background-table-row: #f5f5f5;
+    --color-background-white: #ffffff;
+    --color-border-gray: #999;
+    
+    /* Severity Colors */
+    --color-rating-3: #a5d63a;
+    --color-rating-2: #f2fa0c;
+    --color-rating-1: #faae0a;
+    --color-rating-0: #ff4a4a;
+    --color-status-resolved: #00a336;
+    --color-status-unresolved: #ff0000;
+    
+    /* Retest Colors */
+    --color-retest-fixed-bg: #d8ebfd;
+    --color-retest-fixed-text: #33607a;
+    --color-retest-fixed-border: #5a9ed5;
+    --color-retest-not-fixed-bg: #E9D8FD;
+    --color-retest-not-fixed-text: #69337A;
+    --color-retest-not-fixed-border: #805AD5;
+    
+    /* Dimensions */
+    --cell-size-standard: 67.5pt;
+    --spacing-standard: 12pt;
+}
+
+/* ======== Print Styles ======== */
+@media print {
+
+    @page {
+        size: A4 portrait;
+        margin: 20mm;
+        
+        @bottom-right-corner {
+            content: counter(page) " / " counter(pages);
+        }
+    }
+
+    @page:first {
+        size: A4 portrait;
+        margin: 0mm;
+
+        @bottom-right-corner {
+            content: "";
+        }
+    }
+
+    @page landscape-A3 {
+        size: A3 landscape;
+        margin: 15mm;
+    }
+
+    .table-of-contents-section a::after { 
+        content: leader(".") target-counter(attr(href), page);
+    }
+}
+
+/* ======== Metadata Page ======== */
+
+.front-page {
+    background: url("../images/page-front.png") no-repeat center center;
+    background-size: cover;
+    height: 100.05vh;
+    width: 100%;
+    overflow: hidden;
+    z-index: -1;
+}
+
+.overlay-image {
+    background: url("../images/logo.png") no-repeat center center;
+    scale: 0.8;
+    position: absolute;
+    top: 35%;
+    left: 65%;
+    transform: translate(-50%, -50%);
+    width: 450pt;
+    height: 450pt;
+    z-index: 1;
+}
+
+.metadata-section article {
+    width: 50%;
+    position: absolute;
+    top: 60%;
+    left: 5%;
+}
+
+.metadata-section article h1, 
+.metadata-section article h2 {
+    padding-bottom: 5pt;
+    margin: 0;
+    color: var(--color-accent-light-purple);
+}
+
+.metadata-section article table {
+    width: 55%;
+    margin-top: 30pt;
+    display: inline-block;
+    color: var(--color-accent-light-purple);
+}
+
+.metadata-section article table th,
+.metadata-section article table td {
+    padding: 0 7.5pt 11.25pt 0;
+    text-align: left;
+    font-size: 9pt;
+    border: none;
+}
+
+/* ======== Table of Contents Page ======== */
+.table-of-contents-section {
+    width: 100%;
+}
+
+.table-of-contents-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 18.75pt 0;
+}
+
+.table-of-contents-section a {
+    display: block;
+    text-decoration: none;
+    color: #333;
+    padding-bottom: 3.75pt;
+}
+
+.table-of-contents-section a:hover {
+    background-color: yellow;
+    cursor: pointer;
+}
+
+/* ======== Summaries Section Tables ======== */
+.summaries-section table {
+    border-spacing: 1;
+    border-collapse: collapse;
+    background: var(--color-background-white);
+    overflow: hidden;
+    width: 100%;
+    margin: var(--spacing-standard) auto;
+    position: relative;
+    text-align: center;
+}
+
+.summaries-section table thead tr {
+    height: 30pt;
+    background-color: var(--color-primary-purple);
+}
+
+.summaries-section table thead tr th {
+    color: var(--color-background-white);
+    font-weight: 400;
+    padding: 7.5pt;
+}
+
+.summaries-section table tbody tr {
+    height: 30pt;
+    background-color: var(--color-background-table-row);
+}
+
+.summaries-section table tbody tr td {
+    padding: 7.5pt;
+    color: var(--color-text-primary);
+}
+
+.summaries-section table tbody tr:nth-child(even) {
+    background-color: var(--color-background-white);
+}
+
+/* ======== Global Styles ======== */
+* {
+    margin: 0;
+    padding: 0;
+    font-family: "Helvetica Neue", sans-serif;
+    font-weight: 300;
+    font-size: 11pt;
+    line-height: 1.4;
+}
+
+body {
+    text-align: justify;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: "Exo 2", serif;
+    font-weight: normal;
+    text-align: left;
+}
+
+h1, h2, h3 {
+    margin: var(--spacing-standard) 0;
+}
+
+h1 { font-size: 24pt; }
+h2 { font-size: 18pt; }
+h3 { font-size: 14.04pt; }
+h4 { font-size: 11pt; }
+h5 { font-size: 9.96pt; }
+h6 { font-size: 8.04pt; }
+
+p {
+    margin: var(--spacing-standard) 0;
+    color: var(--color-text-primary);
+}
+
+mark {
+    padding: 1.5pt;
+}
+
+strong {
+    font-weight: bold;
+    color: var(--color-text-heading);
+}
+
+qa {
+    background-color: fuchsia;
+    padding: 1.5pt;
+    color: var(--color-text-heading);
+}
+
+a[href^="#"] {
+    text-decoration: none;
+}
+
+/* TODO: Add internal link icon styling
+a[href^="#"]::after {
+    position: absolute;
+    content: "";
+    display: inline-block;
+    width: 8pt;
+    height: 8pt;
+    margin-left: 3pt;
+    background-size: 100%;
+    background-image: url("../images/internal-link.png");
+}
+*/
+
+a[href^="http"] {
+    padding-right: 15pt;
+    text-decoration: none;
+}
+
+a[href^="http"]::after {
+    position: absolute;
+    content: "";
+    display: inline-block;
+    width: 8pt;
+    height: 8pt;
+    margin-left: 3pt;
+    background-size: 100%;
+    background-image: url("../images/external-link.png");
+}
+
+ul, ol {
+    padding-left: 15pt;
+    margin: var(--spacing-standard) 0;
+}
+
+ul {
+    list-style-type: disc;
+}
+
+ol {
+    list-style-type: decimal;
+}
+
+ul li, ol li {
+    margin: 3.75pt 0;
+    color: var(--color-text-secondary);
+}
+
+ul li ul {
+    margin: 0;
+}
+
+li::marker {
+    color: var(--color-text-heading);
+}
+
+code {
+    font-family: "Courier New", monospace;
+    color: rgb(201, 20, 201);
+    font-size: 11pt;
+}
+
+pre {
+    border-radius: 4.5pt;
+    margin: var(--spacing-standard) 0 !important;
+}
+
+.token.important {
+    font-weight: 300 !important;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto;
+}
+
+blockquote {
+    color: #555;
+    border-left: 4pt solid #777;
+    padding: 18.75pt;
+    margin: var(--spacing-standard) 0;
+}
+
+retest_fixed {
+    background-color: var(--color-retest-fixed-bg);
+    color: var(--color-retest-fixed-text);
+    border-left: solid var(--color-retest-fixed-border) 3pt;
+    border-radius: 3pt;
+    padding: 7.7pt;
+    margin: var(--spacing-standard) 0;
+    display: block;
+}
+
+retest_not_fixed {
+    background-color: var(--color-retest-not-fixed-bg);
+    color: var(--color-retest-not-fixed-text);
+    border-left: solid var(--color-retest-not-fixed-border) 3pt;
+    border-radius: 3pt;
+    padding: 7.7pt;
+    margin: var(--spacing-standard) 0;
+    display: block;
+}
+
+.page-break {
+    page-break-after: always;
+}
+
+.AE3CEE3B46BEBFFE161D55F7AF5F97F1::before {
+    content: "DRAFT";
+    position: fixed;
+    top: 40%;
+    left: 40%;
+    transform: translate(-50%, -50%) rotate(-30deg);
+    font-size: 10rem;
+    color: rgba(0, 0, 0, 0.05);
+    z-index: 9999;
+    pointer-events: none;
+    white-space: nowrap;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+}
+
+.skip-link {
+    position: absolute;
+    clip: rect(1px, 1px, 1px, 1px);
+    padding: 6pt 12pt;
+    background: var(--color-text-heading);
+    color: var(--color-background-white);
+    text-decoration: none;
+    z-index: 9999;
+    font-weight: bold;
+}
+
+.skip-link:focus,
+.skip-link:active {
+    clip: auto;
+    top: 4.5pt;
+    left: 4.5pt;
+    outline: 1.5pt solid var(--color-background-white);
+    outline-offset: 1.5pt;
+}
+
+/* ======== Shared Status Styles ======== */
+.finding-name {
+    text-align: left;
+}
+
+.finding-status[data-status="Unresolved"], 
+.suggestion-status[data-status="Unresolved"], 
+.risk-status[data-status="Unresolved"] {
+    font-weight: bold;
+    color: var(--color-status-unresolved);
+}
+
+.finding-status[data-status="Resolved"], 
+.suggestion-status[data-status="Resolved"], 
+.risk-status[data-status="Resolved"] {
+    font-weight: bold;
+    color: var(--color-status-resolved);
+}
+
+/* ======== Shared Table Styles ======== */
+/* Base styles for: Document Information, ExecSum, TechSum, Table of Findings, Findings, Suggestions */
+.document-information-section table,
+.execsum-section table,
+.techsum-section table,
+.table-of-findings-section table,
+.table-of-suggestions-section table,
+.table-of-risks-section table,
+.findings-section table,
+.suggestions-section table,
+.risks-section table {
+    border-spacing: 1;
+    border-collapse: collapse;
+    background: var(--color-background-white);
+    overflow: hidden;
+    width: 100%;
+    margin: 0 auto;
+    position: relative;
+    text-align: center;
+}
+
+.document-information-section table thead tr,
+.execsum-section table thead tr,
+.techsum-section table thead tr,
+.table-of-findings-section table thead tr,
+.table-of-suggestions-section table thead tr,
+.table-of-risks-section table thead tr,
+.findings-section table thead tr,
+.suggestions-section table thead tr,
+.risks-section table thead tr {
+    height: 30pt;
+    background-color: var(--color-primary-purple);
+}
+
+.document-information-section table thead tr th,
+.execsum-section table thead tr th,
+.techsum-section table thead tr th,
+.table-of-findings-section table thead tr th,
+.table-of-suggestions-section table thead tr th,
+.table-of-risks-section table thead tr th,
+.findings-section table thead tr th,
+.suggestions-section table thead tr th,
+.risks-section table thead tr th {
+    color: var(--color-background-white);
+    font-weight: 400;
+}
+
+.document-information-section table tbody tr,
+.execsum-section table tbody tr,
+.techsum-section table tbody tr,
+.table-of-findings-section table tbody tr,
+.table-of-suggestions-section table tbody tr,
+.table-of-risks-section table tbody tr,
+.findings-section table tbody tr,
+.suggestions-section table tbody tr,
+.risks-section table tbody tr {
+    height: 30pt;
+    background-color: var(--color-background-table-row);
+}
+
+/* TODO: Consider hiding section titles
+.summaries-section h1, 
+.findings-section h1, 
+.risk-section h1, 
+.suggestions-section h1, 
+.appendices-section h1 {
+    display: none;
+}
+*/
+

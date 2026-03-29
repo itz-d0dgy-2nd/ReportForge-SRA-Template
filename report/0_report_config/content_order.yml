@@ -1,0 +1,40 @@
+# Summaries section ordering within the report.
+# - Each list item represents a directory name used for ordering.
+# - If the list item is left empty, entries will be ordered alphabetically.
+# - NOTE: I MADE THIS CASE SENSITIVE
+Summaries:
+  -
+
+# Risk section ordering within the report.
+# - Each list item represents a directory name used for ordering.
+# - If the list item is left empty, entries will be ordered alphabetically.
+# - NOTE: I MADE THIS CASE SENSITIVE
+Risks:
+  -
+
+# Controls section ordering within the report.
+# - Each list item represents a directory name used for ordering.
+# - If the list item is left empty, entries will be ordered alphabetically.
+# - NOTE: I MADE THIS CASE SENSITIVE
+Controls:
+  - Main Controls
+  - Additional Controls
+
+# Risk Prefixes.
+# - Each map item represents a key and value, 
+#   - The key is the name of the directory
+#   - The value will be the prefix
+# - NOTE: I MADE THIS CASE SENSITIVE
+RiskIdentifierPrefixes:
+  Windows Deployment: WR
+  Linux Deployment: LR
+
+# Control Prefixes.
+# - Each map item represents a key and value, 
+#   - The key is the name of the directory
+#   - The value will be the prefix
+# - NOTE: I MADE THIS CASE SENSITIVE
+ControlIdentifierPrefixes:
+  Main Controls: MC
+  Additional Controls: AC
+

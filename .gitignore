@@ -1,0 +1,7 @@
+.idea/**
+
+amd64*
+
+*.pdf
+*.html
+*.xlsx
